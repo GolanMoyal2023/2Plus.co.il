@@ -2,7 +2,7 @@
   "$schema": "https://schemas.botframework.com/schemas/skills/v2.2/skill-manifest.json",
   "name": "SharePointSkill",
   "description": "Skill to access SharePoint data",
-  "endpoint": "https://<your-skill-endpoint>/api/messages",
+  "endpoint": "https://echo.botframework.com/api/messages>/api/messages",
   "activities": {
     "SharePointQuery": {
       "description": "Query SharePoint data",

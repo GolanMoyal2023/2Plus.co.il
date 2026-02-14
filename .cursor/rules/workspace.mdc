@@ -1,0 +1,16 @@
+---
+description: Workspace preferences and coding guidelines for this project
+alwaysApply: true
+---
+
+# Workspace Rules
+
+## Scripts and tools
+- Prefer **PowerShell**, **Python**, and **Node.js** when possible.
+- Prefer **combining scripts into one** when it makes sense.
+- **Do not change or delete working scripts** without explicit approval.
+- Before deleting or changing existing behavior, **ask for user approval**.
+
+## General
+- Run scripts when relevant to verify or demonstrate behavior.
+- Keep changes minimal and avoid breaking existing behavior.

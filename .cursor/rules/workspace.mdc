@@ -5,6 +5,10 @@ alwaysApply: true
 
 # Workspace Rules
 
+## Project
+- **OpenClaw** — this is our workspace; we are working on **clawbot**.
+- Architecture: WhatsApp-first control plane, Apple Notes as system memory; see `docs/ARCHITECTURE.md`.
+
 ## Scripts and tools
 - Prefer **PowerShell**, **Python**, and **Node.js** when possible.
 - Prefer **combining scripts into one** when it makes sense.

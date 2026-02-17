@@ -1,0 +1,44 @@
+flowchart TB
+    subgraph HUB["🟠 Central Hub"]
+        ORCH[Core AI Orchestrator]
+    end
+
+    subgraph AGENTS["🔵 Specialized Agents"]
+        A1[Server Manager]
+        A2[Content Creator]
+        A3[General Assistant]
+        A4[Orchestrator]
+        A5[Project Builder]
+        A6[Code Manager]
+        A7[Web Agent]
+        A8[Crypto Analyst]
+        A9[Desktop Controller]
+        A10[Device Controller]
+        A11[Task Planner]
+        A12[Docker Manager]
+    end
+
+    subgraph SKILLS["🟣 Skills"]
+        S1[WhatsApp Connector]
+        S2[Email connector]
+        S3[OSINT Investigation]
+        S4[Crypto Scalping]
+        S5[Web App Testing]
+        S6[Security Code Analyzer]
+        S7[Image Builder/Analyzer]
+        S8[Compliance & Privacy]
+    end
+
+    subgraph INFRA["🔶 Infrastructure"]
+        I1[Memory Hierarchy]
+        I2[Feedback Loop]
+        I3[Intelligence Scorer]
+        I4[Observability Layer]
+        I5[Cost Intelligence]
+        I6[Governance Engine]
+        I7[Adaptive Model Routing]
+    end
+
+    ORCH --> A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 & A9 & A10 & A11 & A12
+    A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 & A9 & A10 & A11 & A12 --> S1 & S2 & S3 & S4 & S5 & S6 & S7 & S8
+    I1 & I2 & I3 & I4 & I5 & I6 & I7 --> ORCH

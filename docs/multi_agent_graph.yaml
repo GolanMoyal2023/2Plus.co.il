@@ -1,0 +1,100 @@
+# ClawBot multi-agent orchestration graph
+# Use for dashboard UI (e.g. React Flow, D3) or diagram generation.
+# See MULTI_AGENT_ARCHITECTURE.md for full spec.
+
+hub:
+  id: orchestrator
+  label: Core AI Orchestrator
+  shape: sun
+  color: orange
+
+agents:
+  - id: server-manager
+    label: Server Manager
+  - id: content-creator
+    label: Content Creator
+  - id: general-assistant
+    label: General Assistant
+  - id: orchestrator-agent
+    label: Orchestrator
+  - id: project-builder
+    label: Project Builder
+  - id: code-manager
+    label: Code Manager
+  - id: web-agent
+    label: Web Agent
+  - id: crypto-analyst
+    label: Crypto Analyst
+  - id: desktop-controller
+    label: Desktop Controller
+  - id: device-controller
+    label: Device Controller
+  - id: task-planner
+    label: Task Planner
+  - id: docker-manager
+    label: Docker Manager
+  - id: researcher
+    label: Researcher
+
+skills:
+  - id: whatsapp-connector
+    label: WhatsApp Connector
+  - id: email-connector
+    label: Email connector
+  - id: osint
+    label: OSINT Investigation
+  - id: crypto-scalping
+    label: Crypto Scalping
+  - id: web-app-testing
+    label: Web App Testing
+  - id: security-analyzer
+    label: Security Code Analyzer
+  - id: safety-simulator
+    label: Safety Simulator
+  - id: image-builder
+    label: Image Builder/Analyzer
+  - id: compliance-privacy
+    label: Compliance & Privacy
+
+# Green spheres: atomic tools / integrations (reference graph)
+tools:
+  - github
+  - openclaw
+  - memory
+  - browser
+  - email
+  - db
+  - search
+  - workflow
+  - cron
+  - desktop
+  - device
+  - scope
+  - social-me
+  - download
+  - enterprise
+  - claude-c
+  - web
+  - file
+  - bash
+  - loading
+
+infrastructure:
+  - id: memory-hierarchy
+    label: Memory Hierarchy
+  - id: feedback-loop
+    label: Feedback Loop
+  - id: intelligence-scorer
+    label: Intelligence Scorer
+  - id: observability
+    label: Observability Layer
+  - id: cost-intelligence
+    label: Cost Intelligence
+  - id: governance
+    label: Governance Engine
+  - id: adaptive-model-routing
+    label: Adaptive Model Routing
+  - id: seo-builder
+    label: SEO Analytics Builder
+  - id: saas-builder
+    label: SaaS Builder

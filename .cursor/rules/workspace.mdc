@@ -7,7 +7,7 @@ alwaysApply: true
 
 ## Project
 - **OpenClaw** — this is our workspace; we are working on **clawbot**.
-- Architecture: WhatsApp-first control plane, Apple Notes as system memory; see `docs/ARCHITECTURE.md`.
+- Architecture: WhatsApp-first control plane, Apple Notes as system memory; see `docs/ARCHITECTURE.md`. Multi-agent orchestration (hub, agents, skills, infra): `docs/MULTI_AGENT_ARCHITECTURE.md` + `docs/multi_agent_graph.yaml`.
 
 ## Scripts and tools
 - Prefer **PowerShell**, **Python**, and **Node.js** when possible.

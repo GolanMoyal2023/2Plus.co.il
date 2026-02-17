@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClawBot Multi-Agent Architecture — 3D View</title>
+  <style>
+    * { margin: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: #0a0a0f; color: #e0e0e0; overflow: hidden; }
+    #container { position: relative; width: 100vw; height: 100vh; }
+    #graph3d { width: 100%; height: 100%; display: block; }
+    #legend {
+      position: absolute; bottom: 12px; left: 12px;
+      padding: 10px 14px; background: rgba(0,0,0,0.7); border-radius: 8px; font-size: 12px;
+    }
+    #legend span { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+    #legend .hub { background: #f90; }
+    #legend .agent { background: #39f; }
+    #legend .skill { background: #a35; }
+    #legend .tool { background: #2a8; }
+    #legend .infra { background: #c85; }
+    #hint { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; opacity: 0.8; }
+    #load-error {
+      display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      max-width: 420px; padding: 20px; background: #1a1a24; border: 1px solid #444; border-radius: 12px;
+      font-size: 14px; line-height: 1.5; text-align: center;
+    }
+    #load-error.visible { display: block; }
+    #load-error code { background: #2a2a35; padding: 2px 8px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="graph3d"></div>
+    <div id="load-error" aria-live="polite">
+      <p><strong>3D graph didn’t load.</strong></p>
+      <p id="load-error-reason" style="margin-top:8px;font-size:12px;color:#a0a0a0"></p>
+      <p id="load-error-server" style="margin-top:12px">Open this page via a local server (e.g. <code>cd docs && python3 -m http.server 3333</code>), then <code>http://localhost:3333/architecture-3d.html</code></p>
+    </div>
+    <div id="hint">Drag to rotate · Scroll to zoom · Right-drag to pan</div>
+    <div id="legend">
+      <div><span class="hub"></span> Central Hub</div>
+      <div><span class="agent"></span> Agents</div>
+      <div><span class="skill"></span> Skills</div>
+      <div><span class="tool"></span> Tools</div>
+      <div><span class="infra"></span> Infrastructure</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/3d-force-graph@1/dist/3d-force-graph.min.js"></script>
+  <script type="module">
+    const errEl = document.getElementById('load-error');
+    const reasonEl = document.getElementById('load-error-reason');
+    const serverHint = document.getElementById('load-error-server');
+    const showError = (msg) => {
+      if (errEl) {
+        errEl.classList.add('visible');
+        if (reasonEl) reasonEl.textContent = msg || '';
+        if (serverHint && window.location.protocol === 'file:') serverHint.style.display = 'block';
+        else if (serverHint) serverHint.style.display = 'none';
+      }
+    };
+
+    if (window.location.protocol === 'file:') {
+      showError('Open this page via a local server (see below).');
+      throw new Error('file://');
+    }
+
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      if (!gl) {
+        showError('WebGL is not supported or disabled in this browser. Try Chrome or enable hardware acceleration.');
+        throw new Error('No WebGL');
+      }
+    } catch (e) {
+      if (e.message === 'No WebGL' || e.message === 'file://') throw e;
+    }
+
+    const ForceGraph3D = window.ForceGraph3D;
+    if (typeof ForceGraph3D !== 'function') {
+      showError('ForceGraph3D not loaded. Check the browser console and try Chrome.');
+      throw new Error('ForceGraph3D not a function');
+    }
+
+    try {
+    const hubId = 'orchestrator';
+    const agentIds = [
+      'server-manager', 'content-creator', 'general-assistant', 'orchestrator-agent',
+      'project-builder', 'code-manager', 'web-agent', 'crypto-analyst',
+      'desktop-controller', 'device-controller', 'task-planner', 'docker-manager', 'researcher'
+    ];
+    const agentLabels = [
+      'Server Manager', 'Content Creator', 'General Assistant', 'Orchestrator',
+      'Project Builder', 'Code Manager', 'Web Agent', 'Crypto Analyst',
+      'Desktop Controller', 'Device Controller', 'Task Planner', 'Docker Manager', 'Researcher'
+    ];
+    const skillIds = ['whatsapp', 'email', 'osint', 'crypto-scalping', 'web-testing', 'security', 'image', 'compliance'];
+    const skillLabels = ['WhatsApp', 'Email', 'OSINT', 'Crypto Scalping', 'Web Testing', 'Security', 'Image', 'Compliance'];
+    const toolIds = ['github', 'openclaw', 'memory', 'browser', 'email-tool', 'db', 'search', 'workflow', 'cron', 'desktop-tool', 'device-tool', 'scope', 'social-me', 'download', 'enterprise', 'claude-c', 'web', 'file', 'bash', 'loading'];
+    const toolLabels = ['github', 'openclaw', 'memory', 'browser', 'email', 'db', 'search', 'workflow', 'cron', 'desktop', 'device', 'scope', 'social-me', 'download', 'enterprise', 'claude-c', 'web', 'file', 'bash', 'loading'];
+    const infraIds = ['memory-h', 'feedback', 'scorer', 'observability', 'cost', 'governance', 'routing'];
+    const infraLabels = ['Memory Hierarchy', 'Feedback Loop', 'Intelligence Scorer', 'Observability', 'Cost', 'Governance', 'Model Routing'];
+
+    const nodes = [
+      { id: hubId, name: 'Core AI Orchestrator', val: 26, color: '#f90', group: 'hub' },
+      ...agentIds.map((id, i) => ({ id, name: agentLabels[i], val: 10, color: '#39f', group: 'agent' })),
+      ...skillIds.map((id, i) => ({ id, name: skillLabels[i], val: 6, color: '#a35', group: 'skill' })),
+      ...toolIds.map((id, i) => ({ id, name: toolLabels[i], val: 3, color: '#2a8', group: 'tool' })),
+      ...infraIds.map((id, i) => ({ id, name: infraLabels[i], val: 5, color: '#c85', group: 'infra' }))
+    ];
+
+    const links = [
+      ...agentIds.map(aid => ({ source: hubId, target: aid })),
+      ...agentIds.slice(0, 8).map((aid, i) => ({ source: aid, target: skillIds[i % skillIds.length] })),
+      ...agentIds.slice(4, 13).map((aid, i) => ({ source: aid, target: skillIds[(i + 2) % skillIds.length] })),
+      ...infraIds.map(iid => ({ source: iid, target: hubId })),
+      ...skillIds.slice(0, 8).map((_, i) => ({ source: skillIds[i], target: toolIds[i % toolIds.length] })),
+      ...skillIds.map((_, i) => ({ source: skillIds[i], target: toolIds[(i + 5) % toolIds.length] })),
+      ...agentIds.slice(0, 10).map((aid, i) => ({ source: aid, target: toolIds[(i + 3) % toolIds.length] }))
+    ];
+
+    const gData = { nodes, links };
+
+    const Graph = new ForceGraph3D(document.getElementById('graph3d'))
+      .backgroundColor('#0a0a0f')
+      .graphData(gData)
+      .nodeLabel('name')
+      .nodeColor('color')
+      .nodeVal('val')
+      .nodeResolution(12)
+      .linkColor(() => 'rgba(220,230,255,0.6)')
+      .linkOpacity(0.5)
+      .linkWidth(0.4)
+      .linkDirectionalParticles(1)
+      .linkDirectionalParticleWidth(0.3)
+      .showNavInfo(false)
+      .onNodeClick(node => {
+        Graph.cameraPosition(
+          { x: node.x + 80, y: node.y + 80, z: node.z + 80 },
+          node,
+          600
+        );
+      });
+
+    setTimeout(() => Graph.zoomToFit(800), 500);
+    } catch (e) {
+      showError(e.message || String(e));
+    }
+    window.addEventListener('error', (ev) => {
+      if (!document.getElementById('load-error')?.classList.contains('visible'))
+        showError(ev.message || 'Check the browser console (F12) for details.');
+    });
+  </script>
+</body>
+</html>
